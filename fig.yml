@@ -1,0 +1,34 @@
+# Some of these ports are exposed to make it easier to prod at internals
+# from the host machine. For example, redis doesn't really need to be reachable
+# to the host machine, but it has been set as such so I can fiddle with it
+# outside of boot2docker/docker.
+
+web:
+  build: .
+  command: twistd -ny crawler/webapi_service/txserver.tac
+  ports:
+   - "8000:8000"
+  volumes:
+   - .:/code
+  links:
+   - redis
+  environment:
+    REDIS_HOST: redis
+    PYTHONPATH: .
+crawler:
+  build: .
+  command: twistd -ny crawler/crawler_worker/txclient.tac
+  volumes:
+   - .:/code
+  links:
+   - redis
+   - web
+  environment:
+    ZMQ_PUSHER_HOST: web
+    ZMQ_REPEATER_HOST: web
+    REDIS_HOST: redis
+    PYTHONPATH: .
+redis:
+  image: redis
+  ports:
+   - "6379:6379"
