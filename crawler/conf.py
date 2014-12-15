@@ -1,6 +1,9 @@
 """
 This could be much better done any number of ways. Since we're just cranking
 out a quick example, we'll cheeze it up.
+
+Fig no longer recommends env vars, but I noticed this pretty late on and
+don't have time to adjust.
 """
 
 import os
