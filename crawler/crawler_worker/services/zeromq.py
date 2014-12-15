@@ -10,8 +10,7 @@ from twisted.application.service import Service
 from twisted.internet.defer import inlineCallbacks
 from txzmq import ZmqFactory, ZmqPullConnection, ZmqPushConnection, ZmqEndpoint
 
-from crawler.conf import ZMQ_PUSHER_HOST, ZMQ_PUSHER_PORT, ZMQ_REPEATER_HOST, \
-    ZMQ_REPEATER_PORT
+from crawler.conf import ZMQ_PUSHER, ZMQ_REPEATER
 from crawler.crawler_worker.lib.job_crawler import crawl_job_url
 
 
@@ -35,9 +34,8 @@ class ZeroMQListenerService(Service):
 
     def startService(self):
         factory = ZmqFactory()
-        bind_point = 'tcp://%s:%d' % (ZMQ_PUSHER_HOST, ZMQ_PUSHER_PORT)
-        log.msg("Binding to broadcaster: %s" % bind_point)
-        endpoint = ZmqEndpoint('bind', bind_point)
+        log.msg("Listener connecting to broadcaster: %s" % ZMQ_PUSHER)
+        endpoint = ZmqEndpoint('connect', ZMQ_PUSHER)
         self.conn = ZmqPullConnection(factory, endpoint)
         self.conn.onPull = self._message_received
 
@@ -72,9 +70,8 @@ class ZeroMQDelegatorService(Service):
 
     def startService(self):
         factory = ZmqFactory()
-        bind_point = 'tcp://%s:%d' % (ZMQ_REPEATER_HOST, ZMQ_REPEATER_PORT)
-        log.msg("Binding to repeater: %s" % bind_point)
-        endpoint = ZmqEndpoint('bind', bind_point)
+        log.msg("Delegator connecting to repeater: %s" % ZMQ_REPEATER)
+        endpoint = ZmqEndpoint('connect', ZMQ_REPEATER)
         self.conn = ZmqPushConnection(factory, endpoint)
 
     def send_message(self, message):

@@ -7,8 +7,6 @@ from twisted.python import log
 from twisted.application.service import Service
 from txzmq import ZmqFactory, ZmqPushConnection, ZmqEndpoint, ZmqPullConnection
 
-from crawler.conf import ZMQ_PUSHER_PORT, ZMQ_REPEATER_PORT
-
 
 class ZeroMQBroadcastService(Service):
     """
@@ -20,7 +18,9 @@ class ZeroMQBroadcastService(Service):
 
     def startService(self):
         factory = ZmqFactory()
-        endpoint = ZmqEndpoint('connect', 'tcp://0.0.0.0:%d' % ZMQ_PUSHER_PORT)
+        bind_point = 'tcp://0.0.0.0:8050'
+        log.msg("Broadcaster binding on: %s" % bind_point)
+        endpoint = ZmqEndpoint('bind', bind_point)
         self.conn = ZmqPushConnection(factory, endpoint)
 
     def send_message(self, message):
@@ -42,7 +42,9 @@ class ZeroMQRepeaterService(Service):
 
     def startService(self):
         factory = ZmqFactory()
-        endpoint = ZmqEndpoint('connect', 'tcp://0.0.0.0:%d' % ZMQ_REPEATER_PORT)
+        bind_point = 'tcp://0.0.0.0:8051'
+        log.msg("Repeater binding on: %s" % bind_point)
+        endpoint = ZmqEndpoint('bind', bind_point)
         self.conn = ZmqPullConnection(factory, endpoint)
         self.conn.onPull = self._message_received
 

@@ -7,13 +7,17 @@ web:
   build: .
   command: twistd -ny crawler/webapi_service/txserver.tac
   ports:
+   # HTTP API
    - "8000:8000"
+   # ZMQ crawler announcement (PUSH)
+   - "8050:8050"
+   # ZMQ crawler repeater (PULL)
+   - "8051:8051"
   volumes:
    - .:/code
   links:
    - redis
   environment:
-    REDIS_HOST: redis
     PYTHONPATH: .
 crawler:
   build: .
@@ -24,9 +28,6 @@ crawler:
    - redis
    - web
   environment:
-    ZMQ_PUSHER_HOST: web
-    ZMQ_REPEATER_HOST: web
-    REDIS_HOST: redis
     PYTHONPATH: .
 redis:
   image: redis

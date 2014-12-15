@@ -12,6 +12,7 @@ the sake of classes. This example is on the simple side.
 import uuid
 
 import txredisapi
+from twisted.python import log
 from twisted.internet.defer import inlineCallbacks, returnValue
 
 from crawler.conf import REDIS_HOST, REDIS_PORT
@@ -35,6 +36,7 @@ def _get_job_data_conn():
     if __JOB_DATA_REDIS_CONN:
         returnValue(__JOB_DATA_REDIS_CONN)
 
+    log.msg("Connecting to redis store: %s:%d" % (REDIS_HOST, REDIS_PORT))
     __JOB_DATA_REDIS_CONN = yield txredisapi.ConnectionPool(
         host=REDIS_HOST, port=REDIS_PORT)
     returnValue(__JOB_DATA_REDIS_CONN)
