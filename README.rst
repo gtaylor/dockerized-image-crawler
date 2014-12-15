@@ -21,6 +21,22 @@ The crawler is composed of two primary components:
 
 All data is stored in Redis, which is the third and final container.
 
+Setup
+-----
+
+If you aren't able to use Docker_ directly due to an out of date Linux kernel
+or an alternate OS (Windows, Mac OS), you'll need to install
+boot2docker_. Make sure to init/start boot2docker and adjust any environmental
+variables you may want to tweak.
+
+Regardless of your environment, you'll ned fig_.
+
+Clone the repo, then get the containers provisioned::
+
+    fig up
+
+This could take a few minutes, but you should be running afterwards!
+
 How to use
 ----------
 
@@ -79,6 +95,11 @@ On what could be improved
   dependencies instead of pip installing them. The container provisioning
   phase is pretty long right now, since we're compiling C extensions for
   Twisted, ZeroMQ, and I think SSL.
+* The worker and the HTTP API could be split up into two different packaged
+  wheels. The common logic (in the top-level lib module) could end up in its
+  on wheel package, which both the worker and the HTTP API would depend on.
+  Not super important, but it would make the upgrade/deploy process a
+  little more granular.
 
 License
 -------
@@ -88,3 +109,4 @@ A copy of the BSD License may be found in the repository.
 
 .. _Docker: https://www.docker.com/
 .. _Fig: http://www.fig.sh/index.html
+.. _boot2docker: http://boot2docker.io/
