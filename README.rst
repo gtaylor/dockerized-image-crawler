@@ -15,8 +15,9 @@ Architecture
 The crawler is composed of two primary components:
 
 * ``webapi_service`` - Dual-purpose HTTP API server and ZeroMQ message broker.
+
 * ``crawler_worker`` - Receives crawling jobs via ZeroMQ pull, hits the URLs
-    and stores the results.
+  and stores the results.
 
 All data is stored in Redis, which is the third and final container.
 
