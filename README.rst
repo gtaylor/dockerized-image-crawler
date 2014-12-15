@@ -82,6 +82,7 @@ On what could be improved
 
 * Add unit tests! There aren't any. This was a hastily contrived example for fun,
   so I cheated.
+* Unicode support. This would be a non-starter in production.
 * Replace ZeroMQ with a proper message broker. I used ZeroMQ for the sake
   of simplicity. We don't get strong delivery guarantees or persistence out
   of the box, so you won't be getting any of that as-is.
