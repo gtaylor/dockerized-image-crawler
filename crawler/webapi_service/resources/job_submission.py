@@ -4,7 +4,6 @@ import json
 from twisted.python import log
 from twisted.web.resource import Resource
 from twisted.web.server import NOT_DONE_YET
-from twisted.internet.defer import inlineCallbacks
 
 from crawler.lib.data_store import create_job
 from crawler.webapi_service.lib.job_queue import enqueue_crawling_job
