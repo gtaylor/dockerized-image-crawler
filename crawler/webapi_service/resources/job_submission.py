@@ -35,7 +35,9 @@ class JobSubmissionResource(Resource):
         # Read their whole request body in at once. If we were serious, we'd
         # probably buffer this and make sure our front-facing proxy protects us.
         body = cgi.escape(request.content.read())
-        # We aren't expecting CRs or LRs. Strip any out just in case.
+        # We aren't expecting CRs or LRs, as Twisted seems to remove them.
+        # We'll add a second line of defense here in case that changes or
+        # something sneaks through.
         body = remove_cr_and_lf(body)
         # Do our best to figure out which URLs to crawl.
         urls_to_crawl = parse_linebreakless_url_str(body)
